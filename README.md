@@ -33,3 +33,38 @@ export const prisma = globalForPrisma.prisma || new PrismaClient()
 
 if (process.env.NODE_ENV !== "production") globalForPrisma.prisma = prisma
 ```
+
+4. Prisma init
+
+```bash
+npx prisma init
+```
+
+update the prisma.schema file with the following code:
+a code from Supabase
+```prisma
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+```
+then add a simple model
+
+```prisma
+model Todo {
+  id        String   @id @default(uuid())
+  title     String
+  description String
+  completed Boolean  @default(false)
+}
+```
+5. Prisma migration
+
+```bash
+npx prisma migrate dev --name init
+```
