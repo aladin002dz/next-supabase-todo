@@ -38,6 +38,7 @@ if (process.env.NODE_ENV !== "production") globalForPrisma.prisma = prisma
 
 ```bash
 npx prisma init
+npx prisma generate
 ```
 
 update the prisma.schema file with the following code:
