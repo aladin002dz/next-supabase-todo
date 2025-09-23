@@ -66,6 +66,8 @@ model Todo {
 ```
 5. Prisma migration
 
+add `prisma/migrations` to `.gitignore`, then run the following command:
+
 ```bash
 npx prisma migrate dev --name init
 ```
