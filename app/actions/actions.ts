@@ -20,4 +20,14 @@ export async function createTask(formData: FormData) {
     })
 
     revalidatePath("/")
+}
+
+export async function deleteTask(id: string) {
+    await prisma.todo.delete({
+        where: {
+            id: id
+        }
+    })
+
+    revalidatePath("/")
 }   

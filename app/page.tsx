@@ -1,6 +1,7 @@
 import { Task } from "@/lib/_types";
 import { prisma } from "@/prisma";
-import NewListButton from "./_components/NewListButton";
+import NewListButton from "./_components/NewTaskForm";
+import TaskCard from "./_components/TaskCard";
 
 export default async function Home() {
 
@@ -18,13 +19,10 @@ export default async function Home() {
         <h1 className="text-xl font-bold">My Tasks</h1>
         <NewListButton />
       </div>
-      <div className="flex flex-col w-full space-y-11  justify-between items-center">
+      <div className="flex flex-col w-full space-y-4 justify-between items-center">
         {myTasks.length > 0 ? (
           myTasks.map((task) => (
-            <div key={task.id}>
-              <h2 className="text-lg font-bold">{task.title}</h2>
-              <p>{task.description}</p>
-            </div>
+            <TaskCard key={task.id} task={task} />
           ))
         ) : (
           <p className="text-gray-500 italic">No tasks found</p>
