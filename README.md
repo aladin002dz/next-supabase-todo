@@ -1,11 +1,25 @@
 # Supabase CRUD
 
 Step by step guide to create a CRUD app with Supabase and Next.js
+This code is made by following the tutorial from [https://www.youtube.com/watch?v=kbW65T75aUo](https://www.youtube.com/watch?v=kbW65T75aUo)
+
+## Tech Stack
+
+<div align="center">
+
+![Next.js](https://img.shields.io/badge/Next.js-000000?style=for-the-badge&logo=next.js&logoColor=white)
+![Supabase](https://img.shields.io/badge/Supabase-3ECF8E?style=for-the-badge&logo=supabase&logoColor=white)
+![Prisma](https://img.shields.io/badge/Prisma-2D3748?style=for-the-badge&logo=prisma&logoColor=white)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-316192?style=for-the-badge&logo=postgresql&logoColor=white)
+![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)
+![Shadcn UI](https://img.shields.io/badge/Shadcn_UI-000000?style=for-the-badge&logo=shadcn&logoColor=white)
+
+</div>
 
 1. Create a new Next.js app
 
 ```bash
-npx create-next-app@latest --yes .
+npx create-next-app@latest --yes . # The "." is create the app in the current directory.
 ```
 
 2. Install Shadcn UI components
@@ -33,8 +47,12 @@ export const prisma = globalForPrisma.prisma || new PrismaClient()
 
 if (process.env.NODE_ENV !== "production") globalForPrisma.prisma = prisma
 ```
+4. Create a Supabase project
 
-4. Prisma init
+and get the project Connection URLs.
+
+
+5. Prisma init
 
 ```bash
 npx prisma init
@@ -64,10 +82,16 @@ model Todo {
   completed Boolean  @default(false)
 }
 ```
-5. Prisma migration
+6. Prisma migration
 
 add `prisma/migrations` to `.gitignore`, then run the following command:
 
 ```bash
 npx prisma migrate dev --name init
 ```
+or you can simply run `npx prisma db push` to push the schema to the database.
+
+```bash
+npx prisma db push
+```
+
