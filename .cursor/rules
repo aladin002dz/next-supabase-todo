@@ -1,0 +1,110 @@
+# Cursor AI Project Rules
+# Applied when generating or editing code inside this repository.
+
+rules:
+  # ─── General Project Context ─────────────────────────────
+  - Always assume this project uses:
+      - Next.js (App Router, TypeScript, Server/Client Components).
+      - Supabase for authentication, database, and storage.
+      - TailwindCSS for styling.
+      - shadcn/ui as the UI component library.
+      - Cloudflare R2 (S3-compatible) for file uploads.
+      - Resend for transactional emails.
+      - react-hook-form + zod for forms and validation.
+  - Prefer functional React components with TypeScript.
+
+  # ─── Next.js ─────────────────────────────────────────────
+  - Prefer **server components** whenever possible; only use `"use client"` when necessary (state, hooks, browser APIs).
+  - Use **server actions** for form submissions and mutations instead of API routes when appropriate.
+  - Use Route Handlers (`app/api/.../route.ts`) only for flows requiring programmatic APIs (e.g., presigned URLs, email sending).
+  - Use `next/navigation` for navigation (`useRouter`, `redirect`).
+
+  # ─── Supabase ────────────────────────────────────────────
+  - Use `@supabase/ssr` for browser + server clients.
+  - Use `auth.admin.*` with the Service Role key **only in server-side code** (never client).
+  - Authentication flows:
+      - Email/password signup + signin.
+      - Google & GitHub OAuth providers.
+      - Custom email verification & password reset flows via Resend.
+  - Profile data is stored in a `profiles` table with at least:
+      `id`, `full_name`, `username`, `avatar_url`, `updated_at`.
+
+  # ─── Forms (react-hook-form + zod) ───────────────────────
+  - Always use `react-hook-form` for managing forms.
+  - Validate inputs with `zod` schemas.
+  - Integrate zod with react-hook-form using `zodResolver`.
+  - Show validation errors using shadcn/ui components (e.g., `Form`, `FormField`, `FormMessage`).
+
+  # ─── TailwindCSS ─────────────────────────────────────────
+  - Use Tailwind utility classes for styling.
+  - Use `@apply` only in global or shared CSS files, not inside components.
+  - Always prioritize semantic HTML + Tailwind classes before adding new custom CSS.
+
+  # ─── shadcn/ui ──────────────────────────────────────────
+  - Prefer shadcn/ui components for UI primitives (Button, Input, Card, etc.).
+  - Use `lucide-react` icons when icons are needed.
+  - When extending shadcn components, keep Tailwind utility classes consistent with the project style.
+
+  # ─── Icons (lucide-react) ────────────────────────────────
+  - Always use `lucide-react` for all icons throughout the application.
+  - Import icons individually for better tree shaking: `import { Icon } from "lucide-react"`.
+  - Use consistent icon sizing (typically 16px, 20px, or 24px) with Tailwind classes: `size-4`, `size-5`, `size-6`.
+  - Apply proper ARIA labels for accessibility: `<Icon aria-label="Description" />` or use `aria-hidden="true"` for decorative icons.
+  - Prefer semantic icon names that clearly represent their purpose.
+
+  # ─── R2 Storage ─────────────────────────────────────────
+  - For file uploads (e.g., profile pictures), always generate presigned URLs on the server using AWS SDK v3.
+  - Upload files directly from the client with `fetch(uploadUrl, { method: "PUT", ... })`.
+  - Store the file’s public URL (or CDN URL) in the `profiles` table.
+
+  # ─── Resend (Emails) ────────────────────────────────────
+  - Use the Resend SDK in server-side route handlers or server actions for:
+      - Signup verification (6-digit code).
+      - Forgot password (reset code).
+      - Change email confirmation (6-digit code).
+  - Never send sensitive tokens directly in emails — always use codes or one-time links.
+
+  # ─── Code Quality ───────────────────────────────────────
+  - Always type with TypeScript interfaces or types.
+  - Use async/await and handle errors gracefully (return structured JSON `{ error, data }`).
+  - Ensure database queries and API routes are protected against misuse:
+      - Validate inputs with Zod schemas.
+      - Rate-limit auth-related endpoints.
+  - Write clean, modular code: utilities go under `lib/` or `app/lib/`.
+
+  # ─── Database & Schema ───────────────────────────────
+  - Always enable RLS (Row Level Security) on user-facing tables.
+  - Use consistent naming: snake_case for columns, singular for table names.
+  - Create proper indexes for frequently queried columns.
+  - Use Supabase migrations for schema changes.
+  - Implement proper foreign key constraints and cascading deletes.
+
+  # ─── Performance ──────────────────────────────────────
+  - Use next/image for all images with proper sizing and optimization.
+  - Implement proper loading states and suspense boundaries.
+  - Cache frequently accessed data with React Query or SWR.
+  - Use dynamic imports for code splitting large components.
+  - Optimize bundle size with proper tree shaking.
+
+  # ─── Accessibility ───────────────────────────────────
+  - Always include proper ARIA labels and roles.
+  - Ensure keyboard navigation works for all interactive elements.
+  - Use semantic HTML elements before adding ARIA.
+  - Maintain proper color contrast ratios (WCAG AA compliance).
+  - Test with screen readers and keyboard-only navigation.
+
+  # ─── Error Handling ──────────────────────────────────
+  - Implement error boundaries for client-side error catching.
+  - Use consistent error response formats: `{ error: string, code?: string }`.
+  - Log errors appropriately (client vs server context).
+  - Provide user-friendly error messages with actionable guidance.
+  - Handle network failures gracefully with retry mechanisms.
+
+  # ─── Extras / Best Practices ────────────────────────────
+  - Use `uuid` package for unique file keys in storage.
+  - Format consistently with Prettier + ESLint.
+  - Favor composition over duplication: reuse hooks/components.
+  - Avoid exposing secrets: only `NEXT_PUBLIC_...` env vars can appear in client code.
+  - Use TypeScript strict mode for better type safety.
+  - Implement proper SEO with Next.js metadata API.
+
